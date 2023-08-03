@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import MoviesList from "./components/MoviesList";
 import "./App.css";
@@ -8,7 +8,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [retryIntervalId, setretryIntervalId] = useState(null);
-  const fetchMovieHandler = async () => {
+  const fetchMovieHandler = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -36,7 +36,7 @@ function App() {
       const intervalId = setInterval(fetchMovieHandler, 5000);
       setretryIntervalId(intervalId);
     }
-  };
+  }, []);
   const handleCancelRetry = () => {
     setError(null);
     setIsLoading(false);
@@ -45,7 +45,7 @@ function App() {
   };
   useEffect(() => {
     fetchMovieHandler();
-  }, []);
+  }, [fetchMovieHandler]);
 
   let content = <h2>No Movies Found</h2>;
   if (movies.length > 0) {
