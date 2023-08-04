@@ -1,59 +1,41 @@
 import React from "react";
-import { useState } from "react";
+import { useRef } from "react";
+import classes from "./AddMovie.module.css";
 
 const InputForm = (props) => {
-  const [title, setTitle] = useState("");
-  const [openingText, setOpeningText] = useState("");
-  const [date, SetDate] = useState("");
-  const titleChangeHandler = (e) => {
-    setTitle(e.targget.value);
-  };
-  const openingTextChangeHandler = (e) => {
-    setOpeningText(e.target.value);
-  };
-  const ReleaseDateTextChangeHandler = (e) => {
-    SetDate(e.target.value);
-  };
-  const submitHandler = (e) => {
-    e.preventDefault();
-    const data = {
-      title: title,
-      openingText: openingText,
-      releaseDate: date,
+  const titleRef = useRef("");
+  const openingTextRef = useRef("");
+  const releaseDateRef = useRef("");
+
+  function submitHandler(event) {
+    event.preventDefault();
+
+    // could add validation here...
+
+    const movie = {
+      title: titleRef.current.value,
+      openingText: openingTextRef.current.value,
+      releaseDate: releaseDateRef.current.value,
     };
-    props.onAddMovie(data);
-  };
+
+    props.onAddMovie(movie);
+  }
+
   return (
     <form onSubmit={submitHandler}>
-      <label htmlFor="Title">Title</label>
-      <br />
-      <input
-        type="text"
-        name="Title"
-        id="Title"
-        onChange={titleChangeHandler}
-      />
-      <br />
-      <label htmlFor="openingText">openingText</label>
-      <br />
-      <textarea
-        name="openingText"
-        id="openingText"
-        cols="30"
-        rows="5"
-        onChange={openingTextChangeHandler}
-      ></textarea>
-      <br />
-      <label htmlFor="ReleaseDate">ReleaseDate</label>
-      <br />
-      <input
-        type="date"
-        name="ReleaseDate"
-        id="ReleaseDate"
-        onChange={ReleaseDateTextChangeHandler}
-      />
-      <br />
-      <button>Add Movies</button>
+      <div className={classes.control}>
+        <label htmlFor="title">Title</label>
+        <input type="text" id="title" ref={titleRef} />
+      </div>
+      <div className={classes.control}>
+        <label htmlFor="opening-text">Opening Text</label>
+        <textarea rows="5" id="opening-text" ref={openingTextRef}></textarea>
+      </div>
+      <div className={classes.control}>
+        <label htmlFor="date">Release Date</label>
+        <input type="text" id="date" ref={releaseDateRef} />
+      </div>
+      <button>Add Movie</button>
     </form>
   );
 };
